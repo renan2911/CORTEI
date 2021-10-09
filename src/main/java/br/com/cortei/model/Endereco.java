@@ -24,6 +24,12 @@ public class Endereco {
 	private String cep;
 	
 	@Column(nullable = false)
+	private String rua;
+	
+	@Column(nullable = true)
+	private String complemento;
+	
+	@Column(nullable = false)
 	private String bairro; 
 	
 	@Column(nullable = false)
