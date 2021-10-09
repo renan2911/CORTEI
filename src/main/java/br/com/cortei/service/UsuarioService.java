@@ -42,7 +42,7 @@ public class UsuarioService {
 	public List<UsuarioDTO> buscarUsuarios() {
 		List<Usuario> usuario = usuarioRepository.findAll();
 		
-		List<UsuarioDTO> resposta = usuario.stream().map(obj -> new UsuarioDTO(obj.getNome_completo(), obj.getEmail(), obj.getUsuario(), obj.getEndereco(), obj.getId())).collect(Collectors.toList());
+		List<UsuarioDTO> resposta = usuario.stream().map(obj -> new UsuarioDTO(obj.getNome_completo(), obj.getEmail(), obj.getUsuario(), obj.getEndereco(), obj.getId(), obj.getTelefone(), obj.getSenha())).collect(Collectors.toList());
 		
 		return resposta;
 	}

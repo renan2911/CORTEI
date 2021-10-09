@@ -18,13 +18,19 @@ public class UsuarioDTO {
 	
 	private String usuario;
 	
+	private String telefone;
+	
+	private String senha;
+	
 	Endereco endereco;
 
-	public UsuarioDTO(String nome, String email, String usuario, Endereco endereco, Long id) {
+	public UsuarioDTO(String nome, String email, String usuario, Endereco endereco, Long id, String telefone, String senha) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.usuario = usuario;
 		this.endereco = endereco;
+		this.telefone = telefone;
+		this.senha = senha;
 	}
 }
