@@ -1,6 +1,7 @@
 package br.com.cortei.dto;
 
 import br.com.cortei.model.Endereco;
+import br.com.cortei.model.Usuario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,21 +17,38 @@ public class UsuarioDTO {
 	
 	private String email;
 	
-	private String usuario;
-	
 	private String telefone;
 	
-	private String senha;
+	private Long id_endereco; 
 	
-	Endereco endereco;
+	private String cep;
+	
+	private String rua;
 
-	public UsuarioDTO(String nome, String email, String usuario, Endereco endereco, Long id, String telefone, String senha) {
+	private String bairro; 
+	
+	private String cidade; 
+	
+	private String estado;
+	
+	private String complemento;
+
+	public UsuarioDTO(String nome, String email, Endereco endereco, Long id, String telefone) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
-		this.usuario = usuario;
-		this.endereco = endereco;
 		this.telefone = telefone;
-		this.senha = senha;
+		this.id_endereco = endereco.getId();
+		this.cep = endereco.getCep();
+		this.rua = endereco.getRua();
+		this.bairro = endereco.getBairro();
+		this.cidade = endereco.getCidade();
+		this.estado = endereco.getEstado();
+		this.complemento = endereco.getComplemento();
+
+	}
+	
+	public static Usuario fromUsuario(UsuarioDTO user, Endereco end) {
+		return new Usuario(user.getNome(), user.getEmail(), user.getTelefone(), end);
 	}
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cortei.dto.MensagemDTO;
 import br.com.cortei.dto.UsuarioDTO;
-import br.com.cortei.model.Usuario;
 import br.com.cortei.service.UsuarioService;
 import lombok.AllArgsConstructor;
 
@@ -28,7 +27,7 @@ public class UsuarioController {
 	private UsuarioService usuarioService;
 	
 	@PostMapping
-	public ResponseEntity<MensagemDTO> criarConta(@RequestBody Usuario usuario) {
+	public ResponseEntity<MensagemDTO> criarConta(@RequestBody UsuarioDTO usuario) {
 		return new ResponseEntity<MensagemDTO>(usuarioService.salvarUsuario(usuario), HttpStatus.CREATED);
 	}
 	
@@ -43,7 +42,7 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<MensagemDTO> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
+	public ResponseEntity<MensagemDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuario){
 		return new ResponseEntity<MensagemDTO>(usuarioService.atualizarUsuario(id, usuario), HttpStatus.OK);
 	}
 }

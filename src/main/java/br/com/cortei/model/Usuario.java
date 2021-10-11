@@ -22,16 +22,10 @@ public class Usuario {
 	private Long id;
 	
 	@Column(nullable = false)
-	private String nome_completo;
+	private String nome;
 	
 	@Column(nullable = false)
 	private String email;
-	
-	@Column(nullable = false)
-	private String usuario;
-	
-	@Column(nullable = false)
-	private String senha; 
 	
 	@Column(nullable = false)
 	private String telefone;
@@ -63,6 +57,15 @@ public class Usuario {
 			return false;
 		return true;
 	}
+
+	public Usuario(String nome, String email, String telefone, Endereco endereco) {
+		this.nome = nome;
+		this.email = email;
+		this.telefone = telefone;
+		this.endereco = endereco;
+	}
+
+	
 	
 	
 }

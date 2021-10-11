@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Endereco {
 	
@@ -25,10 +27,7 @@ public class Endereco {
 	
 	@Column(nullable = false)
 	private String rua;
-	
-	@Column(nullable = true)
-	private String complemento;
-	
+
 	@Column(nullable = false)
 	private String bairro; 
 	
@@ -37,9 +36,14 @@ public class Endereco {
 	
 	@Column(nullable = false)
 	private String estado;
+	
+	@Column(nullable = true)
+	private String complemento;
 
-	@Column(nullable = false)
-	private String tp_usuario;
+//	@Column(nullable = false)
+//	private String tp_usuario;
+	
+	
 	
 	@Override
 	public int hashCode() {
@@ -64,5 +68,14 @@ public class Endereco {
 		} else if (!cep.equals(other.cep))
 			return false;
 		return true;
+	}
+
+	public Endereco(String cep, String rua, String bairro, String cidade, String estado, String complemento) {
+		this.cep = cep;
+		this.rua = rua;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.estado = estado;
+		this.complemento = complemento;
 	}
 }

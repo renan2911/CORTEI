@@ -17,82 +17,92 @@ import br.com.cortei.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
-	
+
 	@Autowired
 	UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	EnderecoRepository enderecoRepository;
-	
-	public MensagemDTO salvarUsuario(Usuario usuario) {
-		
-		if(verificandoUsuario(usuario.getEmail()))
+
+	public MensagemDTO salvarUsuario(UsuarioDTO usuario) {
+
+		if (verificandoUsuario(usuario.getEmail()))
 			throw new DataBaseException("Usuário informado já foi cadastrado!");
-		
-		if(verificaEndereco(usuario.getEndereco().getCep())) {
-			Endereco enderecoRes = enderecoRepository.findByCep(usuario.getEndereco().getCep());
+
+		if (verificaEndereco(usuario.getCep())) {
+			Endereco enderecoRes = enderecoRepository.findByCep(usuario.getCep());
 			enderecoRepository.save(enderecoRes);
 		}
-		enderecoRepository.save(usuario.getEndereco());
-		usuarioRepository.save(usuario);
-		
+
+		Endereco end = new Endereco(usuario.getCep(), usuario.getRua(), usuario.getBairro(), usuario.getCidade(),
+				usuario.getEstado(), usuario.getComplemento());
+
+		enderecoRepository.save(end);
+
+		usuarioRepository.save(UsuarioDTO.fromUsuario(usuario, end));
+
 		return new MensagemDTO("Usuario criado com sucesso");
 	}
-	
+
 	public List<UsuarioDTO> buscarUsuarios() {
 		List<Usuario> usuario = usuarioRepository.findAll();
-		
-		List<UsuarioDTO> resposta = usuario.stream().map(obj -> new UsuarioDTO(obj.getNome_completo(), obj.getEmail(), obj.getUsuario(), obj.getEndereco(), obj.getId(), obj.getTelefone(), obj.getSenha())).collect(Collectors.toList());
-		
+
+		List<UsuarioDTO> resposta = usuario.stream().map(
+				obj -> new UsuarioDTO(obj.getNome(), obj.getEmail(), obj.getEndereco(), obj.getId(), obj.getTelefone()))
+				.collect(Collectors.toList());
+
 		return resposta;
 	}
-	
+
 	public MensagemDTO deleteUsuario(Long id) {
 		try {
-			usuarioRepository.deleteById(id);			
-		}catch (Exception e) {
-			throw new DataBaseException("Erro ao deletar usuário! Error: "+ e.getMessage());
+			usuarioRepository.deleteById(id);
+		} catch (Exception e) {
+			throw new DataBaseException("Erro ao deletar usuário! Error: " + e.getMessage());
 		}
-		
-		return new MensagemDTO("Usuario removido! Id do usuário removido: "+ id);
+
+		return new MensagemDTO("Usuario removido! Id do usuário removido: " + id);
 	}
-	
-	public MensagemDTO atualizarUsuario(Long id, Usuario usuario) {
+
+	public MensagemDTO atualizarUsuario(Long id, UsuarioDTO usuario) {
 		
-		if(!verificandoUsuario(id, usuario.getId()))
-			throw new DataBaseException("Erro durante a atualização do usuario: "+ id);
-		
-		enderecoRepository.save(usuario.getEndereco());
-		usuarioRepository.save(usuario);
-		return new MensagemDTO("Usuario com id: "+id+ " foi atualizado!");
+		if (!verificandoUsuario(id, usuario.getId()))
+			throw new DataBaseException("Erro durante a atualização do usuario: " + id);
+
+		Endereco end = new Endereco(usuario.getCep(), usuario.getRua(), usuario.getBairro(), usuario.getCidade(),
+				usuario.getEstado(), usuario.getComplemento());
+
+		enderecoRepository.save(end);
+
+		usuarioRepository.save(UsuarioDTO.fromUsuario(usuario, end));
+		return new MensagemDTO("Usuario com id: " + id + " foi atualizado!");
 	}
-	
-	
+
 	public Boolean verificandoUsuario(Long id, Long idUsuario) {
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
-		
-		if(id != idUsuario || usuario.isEmpty())
+
+		if (id != idUsuario || usuario.isEmpty())
 			return false;
-		
+
 		return true;
 	}
-	
+
 	public Boolean verificandoUsuario(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email);
-		
-		if(usuario == null)
+
+		if (usuario == null)
 			return false;
-		
+
 		return true;
 	}
-	
+
 	public Boolean verificaEndereco(String cep) {
-		Endereco endereco =  enderecoRepository.findByCep(cep);
-		
-		if(endereco == null)
+		Endereco endereco = enderecoRepository.findByCep(cep);
+
+		if (endereco == null)
 			return false;
-		
+
 		return true;
 	}
-	
+
 }
